@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acesso ao Google Drive</title>
+</head>
+<body>
+  <h1>Arquivos no Google Drive</h1>
+  
+  <label for="clientID">ID de Cliente:</label>
+  <input type="text" id="clientID" placeholder="Insira seu ID de Cliente">
+  
+  <label for="apiKey">Chave de API:</label>
+  <input type="text" id="apiKey" placeholder="Insira sua Chave de API">
+  
+  <label for="folderID">ID da Pasta:</label>
+  <input type="text" id="folderID" placeholder="Insira sua ID de Pasta">
+  
+  <button onclick="iniciarAPI()">Iniciar API</button>
+  <button onclick="listarArquivos()">Listar Arquivos</button>
+
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script>
+    let CLIENT_ID = '';
+    let API_KEY = '';
+    let FOLDER_ID = '';
+
+    function iniciarAPI() {
+      CLIENT_ID = document.getElementById('clientID').value;
+      API_KEY = document.getElementById('apiKey').value;
+      FOLDER_ID = document.getElementById('folderID').value;
+
+      gapi.load('client', function() {
+        gapi.client.init({
+          apiKey: API_KEY,
+          clientId: CLIENT_ID,
+          discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+          scope: 'https://www.googleapis.com/auth/drive.metadata.readonly',
+        }).then(function() {
+          console.log('API do Google Drive iniciada.');
+        });
+      });
+    }
+
+    function listarArquivos() {
+      gapi.client.drive.files.list({
+        q: `'${FOLDER_ID}' in parents`,
+        fields: 'files(name, id)',
+      }).then(function(response) {
+        const arquivos = response.result.files;
+        if (arquivos && arquivos.length > 0) {
+          console.log('Arquivos encontrados:');
+          arquivos.forEach(function(arquivo) {
+            console.log(`${arquivo.name} (${arquivo.id})`);
+          });
+        } else {
+          console.log('Nenhum arquivo encontrado.');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

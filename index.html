@@ -3,29 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="src/style.css">
+  <link rel="stylesheet" href="/src/script.js">
   <title>Reprodutor de MP3</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 20px;
-    }
-    h1 {
-      color: #333;
-    }
-    audio {
-      width: 80%;
-      margin: 20px 0;
-    }
-    p {
-      margin-bottom: 10px;
-    }
-    button {
-      padding: 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-  </style>
+  
 </head>
 <body>
   <h1>Reprodutor de MP3</h1>
@@ -33,47 +14,5 @@
   <p>Tempo de reprodução: <span id="currentTime">0:00</span></p>
   <button id="saveButton">Salvar Tempo</button>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const audioPlayer = document.getElementById('audioPlayer');
-      const currentTimeSpan = document.getElementById('currentTime');
-      const saveButton = document.getElementById('saveButton');
-
-      // Recuperar o tempo salvo, se existir
-      const savedTime = localStorage.getItem('savedTime');
-      if (savedTime) {
-        audioPlayer.currentTime = parseFloat(savedTime);
-        updateCurrentTime();
-      }
-
-      // Atualizar o tempo de reprodução exibido
-      function updateCurrentTime() {
-        const minutes = Math.floor(audioPlayer.currentTime / 60);
-        const seconds = Math.floor(audioPlayer.currentTime % 60);
-        const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        currentTimeSpan.textContent = formattedTime;
-      }
-
-      // Atualizar o tempo de reprodução durante a reprodução
-      audioPlayer.addEventListener('timeupdate', updateCurrentTime);
-
-      // Salvar o tempo de reprodução atual
-      saveButton.addEventListener('click', function() {
-        localStorage.setItem('savedTime', audioPlayer.currentTime.toString());
-        alert('Tempo salvo com sucesso!');
-      });
-
-      // Adicionar um evento para quando o áudio for carregado
-      audioPlayer.addEventListener('loadedmetadata', function() {
-        // Exemplo: definir o tempo inicial para 30 segundos
-        audioPlayer.currentTime = 30;
-        updateCurrentTime();
-      });
-
-      // Adicione suas músicas aqui
-      const musicSource = 'caminho/do/seu/arquivo.mp3';
-      audioPlayer.src = musicSource;
-    });
-  </script>
 </body>
 </html>
